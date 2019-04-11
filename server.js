@@ -5,10 +5,10 @@ const cors = require('cors');
 const knex = require('knex');
 const morgan = require('morgan');
 
-const register = require('./controllers/register');
-const signin = require('./controllers/signin');
-const profile = require('./controllers/profile');
-const auth = require('./controllers/authorization');
+//importacion de modulos
+const register = require('./controllers/register.controller');
+const signin = require('./controllers/signin.controller');
+const auth = require('./controllers/authorization.controller');
 
 //Database Setup
 const db = knex({
@@ -35,11 +35,10 @@ app.use(morgan('combined'));
 app.use(cors(corsOptions))
 app.use(bodyParser.json());
 
-app.post('/signin', signin.signinAuthentication(db, bcrypt))
-app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) })
-app.get('/profile/:id', auth.requireAuth, (req, res) => { profile.handleProfileGet(req, res, db)})
-app.post('/profile/:id', auth.requireAuth, (req, res) => { profile.handleProfileUpdate(req, res, db)})
+//rutas
+app.post('/api/signin', signin.signinAuthentication(db, bcrypt))
+app.post('/api/register', (req, res) => { register.registerUser(req, res, db, bcrypt) })
 
 app.listen(3000, ()=> {
-  console.log('app is running on port 3000');
+  console.log('app corriendo en localhost:3000');
 })
